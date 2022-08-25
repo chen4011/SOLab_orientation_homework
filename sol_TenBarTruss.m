@@ -1,6 +1,7 @@
 function [sigma, Q] = sol_TenBarTruss(r1, r2)
     %%
     % 定義各參數數值
+    %r1 = 0.1; r2 = 0.05;
     node_coordinate = [18.28 9.14; 18.28 0; 9.14 9.14; 9.14 0; 0 9.14; 0 0]; %節點座標
     nodei_near_element = [3; 1; 4; 2; 3; 1; 4; 3; 2; 1]; %元素旁的節點
     nodej_near_element = [5; 3; 6; 4; 4; 2; 5; 6; 3; 4]; %元素旁的節點
@@ -57,7 +58,7 @@ function [sigma, Q] = sol_TenBarTruss(r1, r2)
     F_reduced(:,[9,10,11,12]) = [];
     Q_reduced(:,[9,10,11,12]) = [];
 
-    Q_reduced = K_reduced\F_reduced; %**可能會有問題**
+    Q_reduced = K_reduced\F_reduced; %**可能會有問題**<---確實有問題
 
     % 建立空白應力矩陣
     sigma = [];
