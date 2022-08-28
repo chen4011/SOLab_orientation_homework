@@ -7,7 +7,7 @@ function [sigma, Q] = sol_TenBarTruss(r1, r2)
     nodej_near_element = [5; 3; 6; 4; 4; 2; 5; 6; 3; 4]; %元素旁的節點
     E = 200000000000;
 
-    A1 = pi*(r1)^2; A2 = pi*(r2)^2;
+    A1 = pi*(r1).^2; A2 = pi*(r2).^2;
     A = [A1 A1 A1 A1 A1 A1 A2 A2 A2 A2]; %面積矩陣
     
     L = zeros(1,10);
@@ -58,7 +58,8 @@ function [sigma, Q] = sol_TenBarTruss(r1, r2)
     F_reduced(:,[9,10,11,12]) = [];
     Q_reduced(:,[9,10,11,12]) = [];
 
-    Q_reduced = K_reduced\F_reduced; %**可能會有問題**<---確實有問題
+    Q_reduced = inv(K_reduced) * F_reduced'; %**可能會有問題**
+    Q = [Q_reduced; 0; 0; 0; 0];
 
     % 建立空白應力矩陣
     sigma = [];
@@ -66,17 +67,13 @@ function [sigma, Q] = sol_TenBarTruss(r1, r2)
     % 計算應力 (stress) (可使用 compute_stress 函數)
     % sigma(1) = ...
     for n=1:10
-        sigma = compute_stress(Q_reduced(n), E, L(n), cos(n), sin(n), nodei_near_element(n), nodej_near_element(n));
+        sigma(n) = compute_stress(Q, E, L(n), cos(n), sin(n), nodei_near_element(n), nodej_near_element(n));
     end
 
     % (optional) compute reactions
     K_reaction = K; Q_reaction = Q;
     K_reaction([1 2 3 4 5 6 7 8],:) = [];
-    K_reaction(:,[1 2 3 4 5 6 7 8]) = [];
-    Q_reaction(:,[1 2 3 4 5 6 7 8]) = [];
     R = [];
     R = K_reaction*Q_reaction;
 
-    Q = [Q_reduced Q_reaction];
-  
 end
