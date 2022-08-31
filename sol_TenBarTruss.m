@@ -1,4 +1,4 @@
-function [sigma, Q] = sol_TenBarTruss(r1,r2)
+function [sigma, Q2] = sol_TenBarTruss(r1,r2)
     %%
     % 定義各參數數值
     %r1 = 0.1; r2 = 0.05;
@@ -61,6 +61,7 @@ function [sigma, Q] = sol_TenBarTruss(r1,r2)
 
     Q_reduced = inv(K_reduced) * F_reduced'; %**可能會有問題**
     Q = [Q_reduced; 0; 0; 0; 0];
+    Q2 = ((Q(3)).^2+(Q(4)).^2)^0.5;
 
     % 建立空白應力矩陣
     sigma = [];
